@@ -1,9 +1,12 @@
 package config
 
 import (
+	v1 "cfv-api/api/v1"
+	"cfv-api/middleware"
 	"fmt"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -41,4 +44,24 @@ func LoadDB() (*gorm.DB, error) {
 	}
 
 	return db, nil
+}
+
+func SetupApp() (*gin.Engine, error) {
+	db, err := LoadDB()
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, nil
+	}
+
+	app := gin.Default()
+	api := app.Group("/api")
+	api_v1 := api.Group("/v1")
+
+	api_v1.Group("/v1").Use(middleware.SetDatabase(db))
+	{
+		api_v1.GET("/cards", middleware.SetDatabase(db), v1.GetCards)
+	}
+
+	return app, nil
 }
