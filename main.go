@@ -1,17 +1,18 @@
 package main
 
 import (
-	"cfv-api/models"
+	v1 "cfv-api/api/v1"
+	"cfv-api/middleware"
 	"fmt"
-	"net/http"
-	"strconv"
+
+	"cfv-api/config"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	db, err := LoadDB()
+	db, err := config.LoadDB()
 
 	if err != nil {
 		fmt.Println(err)
@@ -19,16 +20,13 @@ func main() {
 	}
 
 	app := gin.Default()
+	api := app.Group("/api")
+	api_v1 := api.Group("/v1")
 
-	app.GET("/", func(c *gin.Context) {
-		if _, err := strconv.ParseInt(c.Query("id"), 10, 64); err != nil {
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "invalid query parameter"})
-		} else {
-			cards := []models.Card{}
-			db.Preload("Sets").Preload("TournamentStatuses").Where("id < 43 AND id > 41").Find(&cards)
-			c.JSON(200, cards)
-		}
-	})
+	api_v1.Group("/v1").Use(middleware.SetDatabase(db))
+	{
+		api_v1.GET("/cards", middleware.SetDatabase(db), v1.GetCards)
+	}
 
 	app.Run()
 }

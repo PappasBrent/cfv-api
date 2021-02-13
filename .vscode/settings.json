@@ -1,0 +1,12 @@
+{
+    "cSpell.words": [
+        "dialector",
+        "gonic",
+        "gorm",
+        "postgres"
+    ],
+    "cSpell.ignoreWords": [
+        "godotenv",
+        "joho"
+    ]
+}

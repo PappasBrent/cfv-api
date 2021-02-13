@@ -4,13 +4,15 @@ import (
 	"os"
 	"testing"
 
+	"cfv-api/config"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func TestLoadDSN(t *testing.T) {
 
-	if _, err := LoadDSN(); err != nil {
+	if _, err := config.LoadDSN(); err != nil {
 		t.Error(err)
 	}
 
@@ -25,7 +27,7 @@ func TestLoadDSN(t *testing.T) {
 
 func TestConnection(t *testing.T) {
 
-	dsn, err := LoadDSN()
+	dsn, err := config.LoadDSN()
 
 	if err != nil {
 		t.Error(err)
