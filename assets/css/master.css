@@ -1,0 +1,19 @@
+/* TODO: Change font size based on user screen size */
+/* TODO: Use css variables for site theming (e.g. color)? */
+/* TODO: Add custom font */
+
+:root {
+    font-size: 20px;
+}
+
+:root * {
+    /* box-sizing: border-box; */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(107.56deg, #FFFFFF 0%, rgba(165, 163, 239, 0.6) 31.77%, #2F1469 100%);
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}

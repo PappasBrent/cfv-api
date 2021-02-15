@@ -1,0 +1,61 @@
+.banner {
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url("/assets/images/banner.png");
+
+    height: 300px;
+    background-repeat: repeat-x;
+
+    display: flex;
+    align-items: center;
+}
+
+.banner-top {
+    animation: scroll-to-right 120s linear infinite;
+}
+
+@keyframes scroll-to-right {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -100% 0;
+    }
+}
+
+#searchBox {
+
+    max-width: 70vw;
+    height: 52px;
+
+    display: block;
+    margin: 0 auto;
+    margin-top: 2rem;
+
+    background: #3f3f3f;
+    border: 2px solid #000000;
+    box-sizing: border-box;
+    border-radius: 3px;
+
+    color: rgb(255, 255, 255);
+    font-size: 1.5rem;
+    padding-left: 1rem;
+}
+
+#searchBox:focus {
+    outline: none;
+    background-color: rgb(80, 80, 80);
+}
+
+#searchBox::placeholder {
+    font-size: 1rem;
+    color: rgb(199, 199, 199)
+}
+
+#header-text {
+    display: block;
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+}

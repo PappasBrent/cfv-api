@@ -56,6 +56,7 @@ func SetupApp() (*gin.Engine, error) {
 	}
 
 	app := gin.Default()
+	app.Static("/assets", "./assets")
 	app.LoadHTMLFiles("views/home.html")
 	app.GET("/", controllers.Home)
 

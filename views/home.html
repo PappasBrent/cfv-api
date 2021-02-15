@@ -5,16 +5,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardfight!! Vanguard API</title>
+    <title>Cardfight!! Vanguard Card Database</title>
+    <link rel="stylesheet" href="/assets/css/master.css">
+    <link rel="stylesheet" href="/assets/css/home.css">
 </head>
 
 <body>
-    <header>Cardfight!! Vanguard API</header>
-    <div class="content">
-        <form action="/api/v1/cards" method="get">
-            <label for="cardName">Card Name</label><input type="text" name="name" id="cardName">
-        </form>
+    <div class="banner banner-top">
+        <header id="header-text">
+            <h1>
+                Cardfight!! Vanguard Card Database
+            </h1>
+        </header>
     </div>
+
+    <div class="content">
+        <input type="text" placeholder="Enter card name (case-sensitive)" name="searchBox" id="searchBox">
+    </div>
+
+    <div class="card-results">
+
+    </div>
+
 </body>
 
 </html>
