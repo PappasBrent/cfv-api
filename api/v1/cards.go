@@ -11,11 +11,10 @@ import (
 	"gorm.io/gorm"
 )
 
+// TODO: Enable querying by URL search params OR JSON
+// depending on request header
+// TODO: Make queries case insensitive somehow?
 func GetCards(c *gin.Context) {
-	// TODO: Enable querying by URL search params OR JSON
-	// dependeng on request header
-	// TODO: Make queries case insensitive somehow?
-	// TODO: Add querying by set
 	db := c.MustGet(constants.DB).(*gorm.DB)
 
 	cardQuery := models.Card{
@@ -76,4 +75,20 @@ func GetCards(c *gin.Context) {
 		Where(&cardQuery).
 		Find(&cards)
 	c.JSON(200, cards)
+}
+
+func GetCardsInSet(c *gin.Context) {
+	db := c.MustGet(constants.DB).(*gorm.DB)
+
+	set := models.Set{}
+	name := c.Query("name")
+
+	if result := db.Preload("Cards").
+		Model(&models.Set{}).
+		Where("name ILIKE ?", name).
+		Find(&set); result.RowsAffected > 0 {
+		c.JSON(200, set)
+	} else {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("no set found with name %q", name)})
+	}
 }
