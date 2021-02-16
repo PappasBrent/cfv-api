@@ -58,10 +58,12 @@ func SetupApp() (*gin.Engine, error) {
 	app := gin.Default()
 	app.Static("/assets", "./assets")
 	app.LoadHTMLFiles("views/home.html")
+
 	app.GET("/", controllers.Home)
 
 	api := app.Group("/api")
 	api_v1 := api.Group("/v1")
+
 	api_v1.Group("/v1").Use(middleware.SetDatabase(db))
 	{
 		api_v1.GET("/cards", middleware.SetDatabase(db), v1.GetCards)
