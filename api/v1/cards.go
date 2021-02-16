@@ -13,67 +13,71 @@ import (
 
 // TODO: Enable querying by URL search params OR JSON
 // depending on request header
-// TODO: Make queries case insensitive somehow?
 func GetCards(c *gin.Context) {
 	db := c.MustGet(constants.DB).(*gorm.DB)
 
-	cardQuery := models.Card{
-		CardType:       c.Query("cardtype"),
-		Clan:           c.Query("clan"),
-		DesignIllus:    c.Query("designillus"),
-		Flavor:         c.Query("flavor"),
-		Format:         c.Query("format"),
-		Grade:          c.Query("grade"),
-		Illust:         c.Query("illust"),
-		IllustColor:    c.Query("illustcolor"),
-		Illust2:        c.Query("illust2"),
-		Illust3:        c.Query("illust3"),
-		Illust4:        c.Query("illust4"),
-		Illust5:        c.Query("illust5"),
-		ImaginaryGift:  c.Query("imaginarygift"),
-		Italian:        c.Query("italian"),
-		Kana:           c.Query("kana"),
-		Kanji:          c.Query("kanji"),
-		Korean:         c.Query("korean"),
-		LimitationText: c.Query("limitationtext"),
-		MangaIllust:    c.Query("mangaillust"),
-		Name:           c.Query("name"),
-		Nation:         c.Query("nation"),
-		Note:           c.Query("note"),
-		OtherNames:     c.Query("othernames"),
-		Phonetic:       c.Query("phonetic"),
-		Race:           c.Query("race"),
-		RideSkill:      c.Query("rideskill"),
-		Skill:          c.Query("skill"),
-		Thai:           c.Query("thai"),
-		Translation:    c.Query("translation"),
-		TriggerEffect:  c.Query("triggereffect"),
+	stringSearchParamsToColumnNames := map[string]string{
+		"cardtype":       "card_type",
+		"clan":           "clan",
+		"designillus":    "design_illus",
+		"flavor":         "flavor",
+		"format":         "format",
+		"grade":          "grade",
+		"illust":         "illust_",
+		"illustcolor":    "illust_color",
+		"illust2":        "illust_2",
+		"illust3":        "illust_3",
+		"illust4":        "illust_4",
+		"illust5":        "illust_5",
+		"imaginarygift":  "imaginary_gift",
+		"italian":        "italian",
+		"kana":           "kana",
+		"kanji":          "kanji",
+		"korean":         "korean",
+		"limitationtext": "limitation_text",
+		"mangaillust":    "manga_illust",
+		"name":           "name",
+		"nation":         "nation",
+		"note":           "note",
+		"othernames":     "other_names",
+		"phonetic":       "phonetic",
+		"race":           "race",
+		"rideskill":      "rideSkill",
+		"skill":          "skill",
+		"thai":           "thai",
+		"translation":    "translation",
+		"triggereffect":  "trigger_effect",
 	}
-	integerFieldNames := []string{"critical", "power", "shield"}
-	for _, field := range integerFieldNames {
-		if val, err := strconv.Atoi(c.DefaultQuery(field, "-1")); err == nil {
-			// Messy but works
-			if val != -1 {
-				switch field {
-				case "critical":
-					cardQuery.Critical = val
-				case "power":
-					cardQuery.Power = val
-				case "shield":
-					cardQuery.Shield = val
-				}
-			}
-		} else {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-				"error": fmt.Sprintf("could not read integer field, %q with value %q", field, val),
-			})
-			return
+	intSearchParamsToColumnNames := map[string]string{
+		"critical": "critical",
+		"power":    "power",
+		"shield":   "shield",
+	}
+
+	query := db.Preload("Sets").Preload("TournamentStatuses")
+
+	for param, columnName := range stringSearchParamsToColumnNames {
+		if val := c.Query(param); val != "" {
+			query = query.Where(fmt.Sprintf("%s ILIKE ?", columnName), val)
 		}
 	}
+
+	for param, columnName := range intSearchParamsToColumnNames {
+		// TODO: Add support for checking greater than, less than, etc.
+		if strVal := c.Query(param); strVal != "" {
+			if intVal, err := strconv.Atoi(strVal); err == nil {
+				query = query.Where(fmt.Sprintf("%s = ?", columnName), intVal)
+			} else {
+				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+					"error": fmt.Sprintf("could not read integer field, %q with value %q", param, strVal),
+				})
+				return
+			}
+		}
+	}
+
 	cards := []models.Card{}
-	db.Preload("Sets").Preload("TournamentStatuses").
-		Where(&cardQuery).
-		Find(&cards).Limit(10)
+	query.Find(&cards)
 	c.JSON(200, cards)
 }
 

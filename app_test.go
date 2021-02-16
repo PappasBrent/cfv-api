@@ -74,8 +74,8 @@ func TestApp(t *testing.T) {
 			t.Run("cards", func(t *testing.T) {
 				endpointPath = "/cards"
 				reqURL := fmt.Sprintf("%s%s%s", baseURL, apiPath, endpointPath)
-				cardName := "Abyss Healer"
 
+				cardName := "Abyss Healer"
 				t.Run(fmt.Sprintf("Get cards named %q", cardName),
 					func(t *testing.T) {
 						expected, err := getExpectedFromFile("./test-jsons/cards-named-abyss-healer.json")
@@ -83,6 +83,54 @@ func TestApp(t *testing.T) {
 							t.Error()
 						}
 						res, err := getHttpResponse(fmt.Sprintf("%s?name=%s", reqURL, url.PathEscape(cardName)))
+						if err != nil {
+							t.Error(err)
+						}
+						if bytes.Compare(res, expected) != 0 {
+							t.Errorf("URL:%q\nResponse: %q\nExpected:%q", reqURL, res, expected)
+						}
+					})
+
+				cardName = strings.ToLower(cardName)
+				t.Run(fmt.Sprintf("Get cards named %q (case-insensitive)", cardName),
+					func(t *testing.T) {
+						expected, err := getExpectedFromFile("./test-jsons/cards-named-abyss-healer.json")
+						if err != nil {
+							t.Error()
+						}
+						res, err := getHttpResponse(fmt.Sprintf("%s?name=%s", reqURL, url.PathEscape(cardName)))
+						if err != nil {
+							t.Error(err)
+						}
+						if bytes.Compare(res, expected) != 0 {
+							t.Errorf("URL:%q\nResponse: %q\nExpected:%q", reqURL, res, expected)
+						}
+					})
+
+				imaginaryGift := "force"
+				t.Run(fmt.Sprintf("Get cards with imaginary gift %q", imaginaryGift),
+					func(t *testing.T) {
+						expected, err := getExpectedFromFile("./test-jsons/cards-with-imaginary-gift-force.json")
+						if err != nil {
+							t.Error()
+						}
+						res, err := getHttpResponse(fmt.Sprintf("%s?imaginarygift=%s", reqURL, url.PathEscape(imaginaryGift)))
+						if err != nil {
+							t.Error(err)
+						}
+						if bytes.Compare(res, expected) != 0 {
+							t.Errorf("URL:%q\nResponse: %q\nExpected:%q", reqURL, res, expected)
+						}
+					})
+
+				power := "16000"
+				t.Run(fmt.Sprintf("Get cards with imaginary gift %q", imaginaryGift),
+					func(t *testing.T) {
+						expected, err := getExpectedFromFile("./test-jsons/cards-with-power-equal-to-16000.json")
+						if err != nil {
+							t.Error()
+						}
+						res, err := getHttpResponse(fmt.Sprintf("%s?power=%s", reqURL, url.PathEscape(power)))
 						if err != nil {
 							t.Error(err)
 						}
