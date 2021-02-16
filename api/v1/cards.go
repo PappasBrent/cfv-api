@@ -73,7 +73,7 @@ func GetCards(c *gin.Context) {
 	cards := []models.Card{}
 	db.Preload("Sets").Preload("TournamentStatuses").
 		Where(&cardQuery).
-		Find(&cards)
+		Find(&cards).Limit(10)
 	c.JSON(200, cards)
 }
 
@@ -83,7 +83,7 @@ func GetCardsInSet(c *gin.Context) {
 	set := models.Set{}
 	name := c.Query("name")
 
-	if result := db.Preload("Cards").
+	if result := db.Preload("Cards.Sets").Preload("Cards.TournamentStatuses").Preload("Cards").
 		Model(&models.Set{}).
 		Where("name ILIKE ?", name).
 		Find(&set); result.RowsAffected > 0 {
