@@ -13,7 +13,33 @@ import (
 
 // TODO: Enable querying by URL search params OR JSON
 // depending on request header
+
+func GetCard(c *gin.Context) {
+	db := c.MustGet(constants.DB).(*gorm.DB)
+
+	if id, err := strconv.Atoi(c.Query("id")); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest,
+			gin.H{"error": "please enter a valid card ID"})
+	} else {
+		cardResult := models.Card{}
+
+		if result := db.Preload("Sets").Preload("TournamentStatuses").
+			Where("id = ?", id).
+			Find(&cardResult); result.RowsAffected == 1 {
+			c.JSON(200, cardResult)
+		} else {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "no card found"})
+		}
+	}
+}
+
 func GetCards(c *gin.Context) {
+
+	if id := c.Query("id"); id != "" {
+		GetCard(c)
+		return
+	}
+
 	db := c.MustGet(constants.DB).(*gorm.DB)
 
 	stringSearchParamsToColumnNames := map[string]string{

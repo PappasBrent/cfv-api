@@ -1,7 +1,7 @@
 package models
 
 type Card struct {
-	ID                 uint64           `json:"-" gorm:"primaryKey"`
+	ID                 uint64           `json:"ID" gorm:"primaryKey"`
 	CardType           string           `json:"CardType"`
 	Clan               string           `json:"Clan"`
 	Critical           int              `json:"Critical"`
