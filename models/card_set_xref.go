@@ -1,5 +1,7 @@
 package models
 
+import "cfv-api/constants"
+
 type CardSetXref struct {
 	ID     uint64 `json:"-"`
 	CardID uint64 `json:"-" gorm:"column:card_id"`
@@ -7,5 +9,5 @@ type CardSetXref struct {
 }
 
 func (CardSetXref) TableName() string {
-	return "card_set_xref"
+	return constants.CardSetXrefsTableName
 }

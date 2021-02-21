@@ -9,26 +9,26 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
+// LoadDSN loads the data source name for connecting to the database.
+// It checks the GIN_MODE environment variable to determine whether
+// to load the DSN from the environment or a .env file
 func LoadDSN() (string, error) {
-	// Load the Data source name for connecting to the database.
-	// Checks the GIN_MODE environment variable to determine whether
-	// to load the DSN from the environment or a .env file
 	if mode := os.Getenv(("GIN_MODE")); mode != "RELEASE" {
 		if err := godotenv.Load(); err != nil {
 			return "", err
 		}
 	}
 
-	host, user, password, db, port := os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_DB"), os.Getenv("DB_PORT")
-	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s", host, user, password, db, port), nil
+	dbFilepath, mode := os.Getenv("DB_NAME"), os.Getenv("MODE")
+	return fmt.Sprintf("file:%s?mode=%s", dbFilepath, mode), nil
 }
 
+// LoadDB loads the gorm DB
 func LoadDB() (*gorm.DB, error) {
-	// Loads the gorm DB
 	dsn, err := LoadDSN()
 
 	if err != nil {
@@ -36,7 +36,7 @@ func LoadDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	dialector := postgres.New(postgres.Config{DSN: dsn, PreferSimpleProtocol: true})
+	dialector := sqlite.Open(dsn)
 	db, err := gorm.Open(dialector, &gorm.Config{})
 
 	if err != nil {
@@ -47,6 +47,8 @@ func LoadDB() (*gorm.DB, error) {
 	return db, nil
 }
 
+// SetupApp creates the gin router, attaches the gorm GB to it,
+// and and sets up its routes
 func SetupApp() (*gin.Engine, error) {
 	db, err := LoadDB()
 
@@ -62,13 +64,13 @@ func SetupApp() (*gin.Engine, error) {
 	app.GET("/", controllers.Home)
 
 	api := app.Group("/api")
-	api_v1 := api.Group("/v1")
+	apiV1 := api.Group("/v1")
 
-	api_v1.Group("/v1").Use(middleware.SetDatabase(db))
+	apiV1.Group("/v1").Use(middleware.SetDatabase(db))
 	{
-		api_v1.GET("/cards", middleware.SetDatabase(db), v1.GetCards)
-		api_v1.GET("/set", middleware.SetDatabase(db), v1.GetCardsInSet)
-		api_v1.GET("/sets", middleware.SetDatabase(db), v1.GetSets)
+		apiV1.GET("/cards", middleware.SetDatabase(db), v1.GetCards)
+		apiV1.GET("/set", middleware.SetDatabase(db), v1.GetCardsInSet)
+		apiV1.GET("/sets", middleware.SetDatabase(db), v1.GetSets)
 	}
 
 	return app, nil

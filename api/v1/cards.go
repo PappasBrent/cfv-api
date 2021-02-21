@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -14,6 +15,7 @@ import (
 // TODO: Enable querying by URL search params OR JSON
 // depending on request header
 
+// GetCard returns a single card as JSON
 func GetCard(c *gin.Context) {
 	db := c.MustGet(constants.DB).(*gorm.DB)
 
@@ -33,6 +35,8 @@ func GetCard(c *gin.Context) {
 	}
 }
 
+// GetCards returns all the cards matching the request's requirements
+// as JSON
 func GetCards(c *gin.Context) {
 
 	if id := c.Query("id"); id != "" {
@@ -84,7 +88,7 @@ func GetCards(c *gin.Context) {
 
 	for param, columnName := range stringSearchParamsToColumnNames {
 		if val := c.Query(param); val != "" {
-			query = query.Where(fmt.Sprintf("%s ILIKE ?", columnName), val)
+			query = query.Where(fmt.Sprintf("UPPER(%s) LIKE ?", columnName), strings.ToUpper(val))
 		}
 	}
 
@@ -107,7 +111,9 @@ func GetCards(c *gin.Context) {
 	c.JSON(200, cards)
 }
 
+// GetCardsInSet returns all the cards in the given set as JSON
 func GetCardsInSet(c *gin.Context) {
+	// TODO: Move this functionality into the Cards function
 	db := c.MustGet(constants.DB).(*gorm.DB)
 
 	set := models.Set{}
@@ -115,7 +121,7 @@ func GetCardsInSet(c *gin.Context) {
 
 	if result := db.Preload("Cards.Sets").Preload("Cards.TournamentStatuses").Preload("Cards").
 		Model(&models.Set{}).
-		Where("name ILIKE ?", name).
+		Where("UPPER(name) LIKE ?", strings.ToUpper(name)).
 		Find(&set); result.RowsAffected > 0 {
 		c.JSON(200, set)
 	} else {

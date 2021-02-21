@@ -1,5 +1,7 @@
 package models
 
+import "cfv-api/constants"
+
 type TournamentStatus struct {
 	ID     uint64 `json:"-"`
 	CardID uint64 `json:"-"`
@@ -11,5 +13,5 @@ type TournamentStatus struct {
 }
 
 func (TournamentStatus) TableName() string {
-	return "tournament_status"
+	return constants.TournamentStatusesTableName
 }

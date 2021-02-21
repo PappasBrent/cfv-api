@@ -10,6 +10,7 @@
         "dbname",
         "godotenv",
         "ilike",
-        "joho"
+        "joho",
+        "jsons"
     ]
 }

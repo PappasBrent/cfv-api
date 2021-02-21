@@ -8,9 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
+// GetSets returns the names of all sets as JSON
+// TODO: Make queries case insensitive somehow?
 // TODO: Enable querying by URL search params OR JSON
 // depending on request header
-// TODO: Make queries case insensitive somehow?
 func GetSets(c *gin.Context) {
 	db := c.MustGet(constants.DB).(*gorm.DB)
 

@@ -1,5 +1,7 @@
 package models
 
+import "cfv-api/constants"
+
 type Card struct {
 	ID                 uint64           `json:"ID" gorm:"primaryKey"`
 	CardType           string           `json:"CardType"`
@@ -33,7 +35,7 @@ type Card struct {
 	Power              int              `json:"Power"`
 	Race               string           `json:"Race"`
 	RideSkill          string           `json:"RideSkill"`
-	Sets               []Set            `json:"Sets" gorm:"many2many:card_set_xref"`
+	Sets               []Set            `json:"Sets" gorm:"many2many:card_set_xrefs"`
 	TournamentStatuses TournamentStatus `json:"TournamentStatuses"`
 	Shield             int              `json:"Shield"`
 	Skill              string           `json:"Skill"`
@@ -43,5 +45,5 @@ type Card struct {
 }
 
 func (Card) TableName() string {
-	return "card"
+	return constants.CardsTableName
 }

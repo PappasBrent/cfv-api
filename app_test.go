@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -14,7 +13,7 @@ import (
 
 	"cfv-api/config"
 
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -24,7 +23,7 @@ func TestLoadDSN(t *testing.T) {
 		t.Error(err)
 	}
 
-	envKeys := []string{"DB_HOST", "DB_USER", "DB_PASSWORD", "DB_DB", "DB_PORT"}
+	envKeys := []string{"DB_NAME", "MODE"}
 
 	for _, key := range envKeys {
 		if _, exists := os.LookupEnv(key); exists == false {
@@ -41,7 +40,7 @@ func TestConnection(t *testing.T) {
 		t.Error(err)
 	}
 
-	dialector := postgres.New(postgres.Config{DSN: dsn, PreferSimpleProtocol: true})
+	dialector := sqlite.Open(dsn)
 
 	if _, err := gorm.Open(dialector, &gorm.Config{}); err != nil {
 		t.Error(err)
@@ -82,7 +81,7 @@ func TestApp(t *testing.T) {
 						if err != nil {
 							t.Error()
 						}
-						res, err := getHttpResponse(fmt.Sprintf("%s?name=%s", reqURL, url.PathEscape(cardName)))
+						res, err := getHTTPResponse(fmt.Sprintf("%s?name=%s", reqURL, url.PathEscape(cardName)))
 						if err != nil {
 							t.Error(err)
 						}
@@ -98,7 +97,7 @@ func TestApp(t *testing.T) {
 						if err != nil {
 							t.Error()
 						}
-						res, err := getHttpResponse(fmt.Sprintf("%s?name=%s", reqURL, url.PathEscape(cardName)))
+						res, err := getHTTPResponse(fmt.Sprintf("%s?name=%s", reqURL, url.PathEscape(cardName)))
 						if err != nil {
 							t.Error(err)
 						}
@@ -114,7 +113,7 @@ func TestApp(t *testing.T) {
 						if err != nil {
 							t.Error()
 						}
-						res, err := getHttpResponse(fmt.Sprintf("%s?imaginarygift=%s", reqURL, url.PathEscape(imaginaryGift)))
+						res, err := getHTTPResponse(fmt.Sprintf("%s?imaginarygift=%s", reqURL, url.PathEscape(imaginaryGift)))
 						if err != nil {
 							t.Error(err)
 						}
@@ -130,7 +129,7 @@ func TestApp(t *testing.T) {
 						if err != nil {
 							t.Error()
 						}
-						res, err := getHttpResponse(fmt.Sprintf("%s?power=%s", reqURL, url.PathEscape(power)))
+						res, err := getHTTPResponse(fmt.Sprintf("%s?power=%s", reqURL, url.PathEscape(power)))
 						if err != nil {
 							t.Error(err)
 						}
@@ -151,7 +150,7 @@ func TestApp(t *testing.T) {
 						if err != nil {
 							t.Error()
 						}
-						res, err := getHttpResponse(reqURL)
+						res, err := getHTTPResponse(reqURL)
 						if err != nil {
 							t.Error(err)
 						}
@@ -173,7 +172,7 @@ func TestApp(t *testing.T) {
 						if err != nil {
 							t.Error()
 						}
-						res, err := getHttpResponse(fmt.Sprintf("%s?name=%s", reqURL, url.PathEscape(setName)))
+						res, err := getHTTPResponse(fmt.Sprintf("%s?name=%s", reqURL, url.PathEscape(setName)))
 						if err != nil {
 							t.Error(err)
 						}
@@ -189,12 +188,12 @@ func TestApp(t *testing.T) {
 func getExpectedFromFile(filepath string) ([]byte, error) {
 	expected, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("Failed to open testing file %q", filepath))
+		return nil, fmt.Errorf("Failed to open testing file %q", filepath)
 	}
 	return expected, nil
 }
 
-func getHttpResponse(reqURL string) ([]byte, error) {
+func getHTTPResponse(reqURL string) ([]byte, error) {
 	res, err := http.Get(reqURL)
 	if err != nil {
 		return nil, err
