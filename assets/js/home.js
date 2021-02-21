@@ -1,22 +1,24 @@
-// TODO: Revamp HTML to uses classes for styling, and data attributes for JS
-
-
 const PROTOCOL = window.location.protocol;
 const BASE_PATH = window.location.host;
 const REQUEST_URL = new URL('/api/v1/cards?name=', PROTOCOL + BASE_PATH);
+const CARD_IMG_CLASS = "card-img";
 
 async function queryCards(searchBox) {
     const res = await fetch(REQUEST_URL + searchBox.value);
     const cards = await res.json();
-    // console.table(resJson);
     populateCardResults(cards);
 }
 
 
 function populateCardResults(cards) {
-    const cardResultDiv = document.querySelector(".card-results");
-    // TODO: Add each card in the card results list to the cardResultsDiv
-    // Will be a div with class card-img
+    const cardResultsDiv = document.querySelector('[data-name="card-results"]');
+    cardResultsDiv.innerHTML = "";
+    for (const card of cards) {
+        const cardDiv = document.createElement("div");
+        cardDiv.classList.add(CARD_IMG_CLASS);
+        cardDiv.style.backgroundImage = `url(${card.imageurlen})`;
+        cardResultsDiv.appendChild(cardDiv);
+    }
 }
 
 

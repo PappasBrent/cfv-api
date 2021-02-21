@@ -74,7 +74,6 @@
     flex-wrap: wrap;
 }
 
-/* TODO: Find out why you can't load cards from the wiki... maybe they don't allow that? */
 .card-img {
     --card-width: 200px;
     --card-aspect-ratio: calc(3.4 / 2.33);
@@ -85,8 +84,8 @@
     border-radius: 5px;
     margin: 1rem 2rem 0rem 2rem;
 
-    background-image: url("/assets/images/test.jpg");
+    /* TODO: Set this to a generic unavailable image */
+    background-image: url("");
     background-size: contain;
     background-repeat: no-repeat;
-
 }
