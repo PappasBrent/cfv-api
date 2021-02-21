@@ -1,6 +1,10 @@
 package models
 
-import "cfv-api/constants"
+import (
+	"cfv-api/constants"
+	"encoding/json"
+	"fmt"
+)
 
 type Card struct {
 	ID                 uint64           `json:"id" gorm:"primaryKey"`
@@ -47,4 +51,23 @@ type Card struct {
 // TableName sets table name for gorm
 func (Card) TableName() string {
 	return constants.CardsTableName
+}
+
+// MarshalJSON comples the card image urls
+func (c *Card) MarshalJSON() ([]byte, error) {
+	// See http://choly.ca/post/go-json-marshalling/
+	type Alias Card
+	result := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(c),
+	}
+	// There has to be a better way to do this...
+	if c.ImageURLEn != "" {
+		result.ImageURLEn = fmt.Sprintf("%s/%s", constants.CardImagesBaseURL, c.ImageURLEn)
+	}
+	if c.ImageURLJp != "" {
+		result.ImageURLJp = fmt.Sprintf("%s/%s", constants.CardImagesBaseURL, c.ImageURLJp)
+	}
+	return json.Marshal(result)
 }
