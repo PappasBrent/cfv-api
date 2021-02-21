@@ -8,6 +8,7 @@ type CardSetXref struct {
 	SetID  uint64 `json:"-" gorm:"column:set_id"`
 }
 
+// TableName sets table name for gorm
 func (CardSetXref) TableName() string {
 	return constants.CardSetXrefsTableName
 }
