@@ -1,3 +1,14 @@
+// Package v1 classification of Cards API
+//
+// Documentation for Cards API
+//
+// Schemes: http
+// BasePath: /api/v1/
+// Version: 1.0.0
+//
+// Produces:
+// - application/json
+// swagger:meta
 package v1
 
 import (
@@ -14,6 +25,19 @@ import (
 
 // TODO: Enable querying by URL search params OR JSON
 // depending on request header
+
+// swagger:route GET /cards cards getCard
+// Returns a single card
+// responses:
+//  200: cardResponse
+
+// A single card response
+// swagger:response cardResponse
+type cardResponse struct {
+	// A single card
+	// in: body
+	Body models.Card
+}
 
 // GetCard returns a single card as JSON
 func GetCard(c *gin.Context) {

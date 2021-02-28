@@ -66,12 +66,13 @@ func SetupApp() (*gin.Engine, error) {
 	api := app.Group("/api")
 	apiV1 := api.Group("/v1")
 
-	apiV1.Group("/v1").Use(middleware.SetDatabase(db))
+	apiV1.Use(middleware.SetDatabase(db))
 	{
-		apiV1.GET("/cards", middleware.SetDatabase(db), v1.GetCards)
-		apiV1.GET("/set", middleware.SetDatabase(db), v1.GetCardsInSet)
-		apiV1.GET("/sets", middleware.SetDatabase(db), v1.GetSets)
+		apiV1.GET("/cards", v1.GetCards)
+		apiV1.GET("/set", v1.GetCardsInSet)
+		apiV1.GET("/sets", v1.GetSets)
 	}
+	apiV1.GET("/docs", middleware.GetRedocMiddleware("v1"))
 
 	return app, nil
 }
