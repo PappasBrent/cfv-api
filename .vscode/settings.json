@@ -4,7 +4,8 @@
         "dialector",
         "gonic",
         "gorm",
-        "postgres"
+        "postgres",
+        "redoc"
     ],
     "cSpell.ignoreWords": [
         "dbname",
