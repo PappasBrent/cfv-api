@@ -23,20 +23,308 @@ import (
 	"gorm.io/gorm"
 )
 
-// TODO: Enable querying by URL search params OR JSON
-// depending on request header
-
 // swagger:route GET /cards cards getCard
 // Returns a single card
 // responses:
 //  200: cardResponse
 
+type cardResponseBody struct {
+	// The ID of the card to search for
+	// example: 43
+	ID uint64 `json:"id" gorm:"primaryKey"`
+
+	// The type of the card
+	// example: Trigger Unit
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	CardType string `json:"cardtype"`
+
+	// The clan the card belongs to
+	// example: Shadow Paladin
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Clan string `json:"clan"`
+
+	// The card's critical value
+	// example: 1
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Critical int `json:"critical"`
+
+	// Card designer / illustrator
+	// example: Azusa / 天城望
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	DesignIllus string `json:"designillus"`
+
+	// The card's effect text
+	// example: (You may only have up to four cards with "HEAL" in a deck.)
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Effect string `json:"effect"`
+
+	// The card's flavor text
+	// example: (V-TD04): Those with the will to fight will never give up!(V-BT04): I don't believe you wish to die like this!(V-BT06): Change the pain of your wounds into anger. And stand up once more!
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Flavor string `json:"flavor"`
+
+	// The legal formats to play the card in
+	// example: Standard / Premium Standard
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Format string `json:"format"`
+
+	// The card's grade
+	// example: 0
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Grade int `json:"grade"`
+
+	// Additional card illustrator field #1
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Illust string `json:"illust"`
+
+	// Additional card illustrator and colorer
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	IllustColor string `json:"illustcolor"`
+
+	// Additional card illustrator field #2
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Illust2 string `json:"illust2"`
+
+	// Additional card illustrator field #3
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Illust3 string `json:"illust3"`
+
+	// Additional card illustrator field #4
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Illust4 string `json:"illust4"`
+
+	// Additional card illustrator field #5
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Illust5 string `json:"illust5"`
+
+	// A URL to a English scan of the card
+	// example: http://cf-vanguard.cards/assets/card-images/43-en.png
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	ImageURLEn string `json:"imageurlen"`
+	// TODO: Update this comment to match the live server
+
+	// A URL to a Japanese scan of the card
+	// example: http://cf-vanguard.cards/assets/card-images/43-jp.png
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	ImageURLJp string `json:"imageurljp"`
+
+	// The card's imaginary gift
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	ImaginaryGift string `json:"imaginarygift"`
+
+	// Italian translation of the card's name
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Italian string `json:"italian"`
+
+	// Kana translation of the card's name
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Kana string `json:"kana"`
+
+	// Kanji translation of the card's name
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Kanji string `json:"kanji"`
+
+	// Korean translation of the card's name
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Korean string `json:"korean"`
+
+	// The card's limitation text
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	LimitationText string `json:"limitationtext"`
+
+	// The illustrator of the card in the manga
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	MangaIllust string `json:"mangaillust"`
+
+	// The English name of the card
+	// example: Abyss Healer
+	Name string `json:"name" gorm:"not null"`
+
+	// The nation the card belongs to
+	// example: United Sanctuary
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Nation string `json:"nation"`
+
+	// Any additional notes on the card form the wiki
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Note string `json:"note"`
+
+	// Other for the card
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	OtherNames string `json:"othernames"`
+
+	// Phonetic pronunciation of the card's name in Japanese
+	// example: Abisu Hīrā
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Phonetic string `json:"phonetic"`
+
+	// The card's power
+	// example: 5000
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Power int `json:"power"`
+
+	// The card's race
+	// example: Angel
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Race string `json:"race"`
+
+	// The card's ride skill
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	RideSkill string `json:"rideskill"`
+
+	// The list of sets that the card belongs to
+	// example: ["V Booster Set 04: Vilest! Deletor","V Trial Deck 04: Ren Suzugamori","V Extra Booster 12: Team Dragon's Vanity!","V Special Series 03: Start Deck Blaster Dark","V Booster Set 06: Phantasmal Steed Restoration"]
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Sets []string `json:"sets" gorm:"many2many:card_set_xrefs"`
+
+	// The tournament statuses of the card
+	// example: {"en":"Unrestricted","jp":"Unrestricted","kr":"Unrestricted","th":"Unrestricted","it":"Unrestricted"}
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	TournamentStatuses models.TournamentStatus `json:"tournamentstatuses"`
+
+	// The card's shield value
+	// example: 20000
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Shield int `json:"shield"`
+
+	// The card's skill name
+	// example: Boost
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Skill string `json:"skill"`
+
+	// Thai translation of the card's name
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Thai string `json:"thai"`
+
+	// The literal translation of the card's name
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	Translation string `json:"translation"`
+
+	// The card's trigger effect
+	// example: Heal / +10000
+	// Extensions:
+	// ---
+	// x-nullable: true
+	// ---
+	TriggerEffect string `json:"triggereffect"`
+}
+
 // A single card response
 // swagger:response cardResponse
+// There has to be a way to replace just the Sets member of the Card
+// model to be an array string, but this works for now
 type cardResponse struct {
 	// A single card
 	// in: body
-	Body models.Card
+	Body cardResponseBody
 }
 
 // GetCard returns a single card as JSON
@@ -104,6 +392,7 @@ func GetCards(c *gin.Context) {
 	}
 	intSearchParamsToColumnNames := map[string]string{
 		"critical": "critical",
+		"grade":    "grade",
 		"power":    "power",
 		"shield":   "shield",
 	}
