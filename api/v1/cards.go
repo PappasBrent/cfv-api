@@ -1,14 +1,3 @@
-// Package v1 classification of Cards API
-//
-// Documentation for Cards API
-//
-// Schemes: http
-// BasePath: /api/v1/
-// Version: 1.0.0
-//
-// Produces:
-// - application/json
-// swagger:meta
 package v1
 
 import (
@@ -23,11 +12,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// swagger:route GET /cards cards getCard
-// Returns a single card
-// responses:
-//  200: cardResponse
-
+// There has to be a way to replace just the Sets member of the Card
+// model to be an array string, but this works for now
 type cardResponseBody struct {
 	// The ID of the card to search for
 	// example: 43
@@ -317,14 +303,34 @@ type cardResponseBody struct {
 	TriggerEffect string `json:"triggereffect"`
 }
 
-// A single card response
+// swagger:route GET /card cards getCard
+//
+// Returns a single card with the specified ID
+//
+//	Responses:
+// 		200: cardResponse
+
+// A single card
 // swagger:response cardResponse
-// There has to be a way to replace just the Sets member of the Card
-// model to be an array string, but this works for now
 type cardResponse struct {
 	// A single card
-	// in: body
+	// in: Body
 	Body cardResponseBody
+}
+
+// swagger:route GET /cards cards getCards
+//
+// Returns a list of cards matching the specified criteria
+//
+// 	Responses:
+//		200: cardsResponse
+
+// A list of cards
+// swagger:response cardsResponse
+type cardsResponse struct {
+	// An array of cards
+	// in: Body
+	Body []cardResponseBody
 }
 
 // GetCard returns a single card as JSON
@@ -332,8 +338,7 @@ func GetCard(c *gin.Context) {
 	db := c.MustGet(constants.DB).(*gorm.DB)
 
 	if id, err := strconv.Atoi(c.Query("id")); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest,
-			gin.H{"error": "please enter a valid card ID"})
+		c.JSON(http.StatusBadRequest, invalidCardIDError())
 	} else {
 		cardResult := models.Card{}
 
@@ -342,19 +347,15 @@ func GetCard(c *gin.Context) {
 			Find(&cardResult); result.RowsAffected == 1 {
 			c.JSON(200, cardResult)
 		} else {
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "no card found"})
+			c.JSON(http.StatusNotFound, cardNotFoundError())
 		}
 	}
 }
 
 // GetCards returns all the cards matching the request's requirements
 // as JSON
+// TODO: Add pagination
 func GetCards(c *gin.Context) {
-
-	if id := c.Query("id"); id != "" {
-		GetCard(c)
-		return
-	}
 
 	db := c.MustGet(constants.DB).(*gorm.DB)
 
@@ -411,9 +412,7 @@ func GetCards(c *gin.Context) {
 			if intVal, err := strconv.Atoi(strVal); err == nil {
 				query = query.Where(fmt.Sprintf("%s = ?", columnName), intVal)
 			} else {
-				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-					"error": fmt.Sprintf("could not read integer field, %q with value %q", param, strVal),
-				})
+				c.JSON(http.StatusInternalServerError, invalidIntegerFieldError(param, strVal))
 				return
 			}
 		}
@@ -438,6 +437,22 @@ func GetCardsInSet(c *gin.Context) {
 		Find(&set); result.RowsAffected > 0 {
 		c.JSON(200, set)
 	} else {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("no set found with name %q", name)})
+		c.JSON(http.StatusNotFound, setNotFoundError(name))
 	}
+}
+
+func invalidCardIDError() map[string]interface{} {
+	return gin.H{"error": "please enter a valid card ID"}
+}
+
+func cardNotFoundError() map[string]interface{} {
+	return gin.H{"error": "no card found"}
+}
+
+func invalidIntegerFieldError(param, val string) map[string]interface{} {
+	return gin.H{"error": fmt.Sprintf("could not read integer field, %q with value %q", param, val)}
+}
+
+func setNotFoundError(name string) map[string]interface{} {
+	return gin.H{"error": fmt.Sprintf("no set found with name %q", name)}
 }

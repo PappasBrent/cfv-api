@@ -1,14 +1,3 @@
-// Package v1 classification of Sets API
-//
-// Documentation for Sets API
-//
-// Schemes: http
-// BasePath: /api/v1/
-// Version: 1.0.0
-//
-// Produces:
-// - application/json
-// swagger:meta
 package v1
 
 import (
@@ -20,9 +9,11 @@ import (
 )
 
 // swagger:route GET /sets sets getSets
-// Returns all sets
-// responses:
-//  200: setsResponse
+//
+// Returns the names of all sets
+//
+// 	Responses:
+//  	200: setsResponse
 
 // A list of all set names
 // swagger:response setsResponse

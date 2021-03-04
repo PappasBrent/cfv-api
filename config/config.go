@@ -59,7 +59,7 @@ func SetupApp() (*gin.Engine, error) {
 
 	app := gin.Default()
 	app.Static("/assets", "./assets")
-	app.LoadHTMLFiles("views/home.html")
+	app.LoadHTMLGlob("views/*")
 
 	app.GET("/", controllers.Home)
 
@@ -68,11 +68,13 @@ func SetupApp() (*gin.Engine, error) {
 
 	apiV1.Use(middleware.SetDatabase(db))
 	{
+		apiV1.GET("/card", v1.GetCard)
 		apiV1.GET("/cards", v1.GetCards)
 		apiV1.GET("/set", v1.GetCardsInSet)
 		apiV1.GET("/sets", v1.GetSets)
 	}
 	apiV1.GET("/docs", middleware.GetRedocMiddleware("v1"))
+	apiV1.GET("/tos", controllers.TOS("tosv1.html"))
 
 	return app, nil
 }
