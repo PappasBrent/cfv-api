@@ -12,10 +12,323 @@ import (
 	"gorm.io/gorm"
 )
 
+// swagger:parameters getCard
+type cardIDParam struct {
+	// A card ID
+
+	// minimum: 1
+	// required: true
+	// example: 43
+	// in: query
+	ID int `json:"id"`
+}
+
+// swagger:parameters getCards
+type cardTypeParam struct {
+	// A card type
+
+	// example: Trigger Unit
+	// in: query
+	CardType string `json:"cardtype"`
+}
+
+// swagger:parameters getCards
+type clanParam struct {
+	// A card clan
+
+	// example: Shadow Paladin
+	// in: query
+	Clan string `json:"clan"`
+}
+
+// swagger:parameters getCards
+type criticalParam struct {
+	// A card's critical value
+
+	// example: 1
+	// in: query
+	Critical int `json:"critical"`
+}
+
+// swagger:parameters getCards
+type designIllusParam struct {
+	// A card's designer / illustrator
+
+	// example: Azusa / 天城望
+	// in: query
+	DesignIllus string `json:"designillus"`
+}
+
+// swagger:parameters getCards
+type effectParam struct {
+	// A card's effect
+
+	// example: (You may only have up to four cards with "HEAL" in a deck.)
+	// in: query
+	Effect string `json:"effect"`
+}
+
+// swagger:parameters getCards
+type flavorParam struct {
+	// A card's flavor text
+
+	// example: (V-TD04): Those with the will to fight will never give up!(V-BT04): I don't believe you wish to die like this!(V-BT06): Change the pain of your wounds into anger. And stand up once more!
+	// in: query
+	Flavor string `json:"flavor"`
+}
+
+// swagger:parameters getCards
+type formatParam struct {
+	// A card's legal play format(s)
+
+	// example: Standard / Premium Standard
+	// in: query
+	Format string `json:"format"`
+}
+
+// swagger:parameters getCards
+type gradeParam struct {
+	// A card's grade
+
+	// example: 0
+	// in: query
+	Grade int `json:"grade"`
+}
+
+// swagger:parameters getCards
+type illustParam struct {
+	// A card's illustrator and colorer
+
+	// in: query
+	Illust string `json:"Illust"`
+}
+
+// swagger:parameters getCards
+type illustColorParam struct {
+	// A card's additional illustrator and colorer
+
+	// in: query
+	IllustColor string `json:"illustcolor"`
+}
+
+// swagger:parameters getCards
+type illust2Param struct {
+	// A card's additional illustrator field #2
+
+	// in: query
+	Illust2 string `json:"illust2"`
+}
+
+// swagger:parameters getCards
+type illust3Param struct {
+	// A card's additional illustrator field #3
+
+	// in: query
+	Illust3 string `json:"illust3"`
+}
+
+// swagger:parameters getCards
+type illust4Param struct {
+	// A card's additional illustrator field #4
+
+	// in: query
+	Illust4 string `json:"illust4"`
+}
+
+// swagger:parameters getCards
+type illust5Param struct {
+	// A card's additional illustrator field #5
+
+	// in: query
+	Illust5 string `json:"illust5"`
+}
+
+// swagger:parameters getCards
+type imageURLEnParam struct {
+	// The url to a scan of the English version of the card
+
+	// in: query
+	ImageURLEn string `json:"imageurlen"`
+}
+
+// swagger:parameters getCards
+type imageURLJpParam struct {
+	// The url to a scan of the Japanese version of the card
+
+	// in: query
+	ImageURLJp string `json:"imageurljp"`
+}
+
+// swagger:parameters getCards
+type imaginaryGiftParam struct {
+	// A card's imaginary gift
+
+	// in: query
+	ImaginaryGift string `json:"imaginarygift"`
+}
+
+// swagger:parameters getCards
+type italianParam struct {
+	// The Italian translation of a card's name
+
+	// in: query
+	Italian string `json:"italian"`
+}
+
+// swagger:parameters getCards
+type kanaParam struct {
+	// The Kana translation of a card's name
+
+	// in: query
+	Kana string `json:"kana"`
+}
+
+// swagger:parameters getCards
+type kanjiParam struct {
+	// The Kanji translation of a card's name
+
+	// in: query
+	Kanji string `json:"kanji"`
+}
+
+// swagger:parameters getCards
+type koreanParam struct {
+	// The Korean translation of a card's name
+
+	// in: query
+	Korean string `json:"korean"`
+}
+
+// swagger:parameters getCards
+type limitationTextParam struct {
+	// A card's limitation text
+
+	// in: query
+	LimitationText string `json:"limitationtext"`
+}
+
+// swagger:parameters getCards
+type mangaIllustParam struct {
+	// The illustrator of the card in the manga
+
+	// in: query
+	MangaIllust string `json:"mangaillust"`
+}
+
+// swagger:parameters getCards
+type nameParam struct {
+	// A card's name, in English
+
+	// in: query
+	Name string `json:"name"`
+}
+
+// swagger:parameters getCards
+type nationParam struct {
+	// A card's nation
+
+	// in: query
+	Nation string `json:"nation"`
+}
+
+// swagger:parameters getCards
+type noteParam struct {
+	// Additional information for the card as found on the wiki
+
+	// in: query
+	Note string `json:"note"`
+}
+
+// swagger:parameters getCards
+type otherNamesParam struct {
+	// A card's other names
+
+	// in: query
+	OtherNames string `json:"othernames"`
+}
+
+// swagger:parameters getCards
+type phoneticParam struct {
+	// A card's Japanese phonetic pronunciation
+
+	// example: Abisu Hīrā
+	// in: query
+	Phonetic string `json:"phonetic"`
+}
+
+// swagger:parameters getCards
+type powerParam struct {
+	// A card's power
+
+	// example: 5000
+	// in: query
+	Power int `json:"power"`
+}
+
+// swagger:parameters getCards
+type raceParam struct {
+	// A card's race
+
+	// example: Angel
+	// in: query
+	Race string `json:"race"`
+}
+
+// swagger:parameters getCards
+type rideSkillParam struct {
+	// A card's ride skill
+
+	// in: query
+	RideSkill string `json:"rideskill"`
+}
+
+// swagger:parameters getCards
+type shieldParam struct {
+	// A card's shield value
+
+	// example: 20000
+	// in: query
+	Shield int `json:"shield"`
+}
+
+// swagger:parameters getCards
+type skillParam struct {
+	// A card's skill name
+
+	// example: Boost
+	// in: query
+	Skill string `json:"skill"`
+}
+
+// swagger:parameters getCards
+type thaiParam struct {
+	// The Thai translation of a card's name
+
+	// in: query
+	Thai string `json:"thai"`
+}
+
+// swagger:parameters getCards
+type translationParam struct {
+	// The literal translation of a card's name
+
+	// in: query
+	Translation string `json:"translation"`
+}
+
+// swagger:parameters getCards
+type triggerEffectParam struct {
+	// A card's trigger effect
+
+	// example: Heal / +10000
+	// in: query
+	TriggerEffect string `json:"triggereffect"`
+}
+
 // There has to be a way to replace just the Sets member of the Card
 // model to be an array string, but this works for now
 type cardResponseBody struct {
-	// The ID of the card to search for
+	// The ID of the card
 	// example: 43
 	ID uint64 `json:"id" gorm:"primaryKey"`
 
@@ -67,7 +380,7 @@ type cardResponseBody struct {
 	// ---
 	Flavor string `json:"flavor"`
 
-	// The legal formats to play the card in
+	// The legal format(s) to play the card in
 	// example: Standard / Premium Standard
 	// Extensions:
 	// ---
@@ -210,7 +523,7 @@ type cardResponseBody struct {
 	// ---
 	Note string `json:"note"`
 
-	// Other for the card
+	// Other names for the card
 	// Extensions:
 	// ---
 	// x-nullable: true
