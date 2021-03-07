@@ -19,6 +19,8 @@ func SetupApp() (*gin.Engine, error) {
 		return nil, nil
 	}
 
+	// TODO: Figure out how to use templates in Go...
+
 	app := gin.Default()
 	app.Static("/assets", "./assets")
 	app.LoadHTMLGlob("views/*.html")

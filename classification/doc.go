@@ -6,9 +6,13 @@
 // CFV wiki. The card scans were all downloaded from the wiki as well.
 // All credit for this data goes to the [CFV Wiki community](https://cardfight.fandom.com/wiki/Cardfight!!_Vanguard_Wiki)
 //
+// 	## Terms of Service
+// 	If you plan to use this API, please adhere to the license requirements
+// 	and provide appropriate credit to this API where it is used.
+//
 // Terms Of Service:
 //
-// tos
+// #section/Terms-of-Service
 //
 //
 //     Schemes: http
