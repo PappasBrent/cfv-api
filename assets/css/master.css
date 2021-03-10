@@ -3,7 +3,14 @@
 /* TODO: Add custom font */
 
 :root {
+    --main-text-color: #D7F9FF;
+    --second-text-color: #FFEDE1;
+    --main-text-color-muted: #AFCBFF;
+    --site-bg-color: #0E1C36;
+
     font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    color: var(--main-text-color);
 }
 
 :root * {
@@ -13,7 +20,7 @@
 }
 
 body {
-    background: linear-gradient(107.56deg, #FFFFFF 0%, rgba(165, 163, 239, 0.6) 31.77%, #2F1469 100%);
+    background: var(--site-bg-color);
     background-repeat: no-repeat;
     min-height: 100vh;
 }

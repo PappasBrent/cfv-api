@@ -6,9 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardfight!! Vanguard Card Database</title>
+
+    <!-- Custom styling -->
     <link rel="stylesheet" href="/assets/css/master.css">
     <link rel="stylesheet" href="/assets/css/home.css">
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <!-- Scripts -->
     <script defer src="/assets/js/home.js"></script>
 </head>
 
@@ -22,7 +30,13 @@
     </div>
 
     <div class="content">
-        <input type="text" placeholder="Enter card name (case-sensitive)" name="searchBox" id="searchBox">
+        <div class="searchbar">
+            <input type="text" placeholder="Enter card name" name="searchBox" id="searchBox">
+            <a class="apiLink" href="/api/v1/docs">
+                <img class="apiIcon" src="/assets/images/api-icon.png" alt="">
+                Docs
+            </a>
+        </div>
 
         <div class="card-results" data-name="card-results">
         </div>

@@ -25,9 +25,13 @@
     }
 }
 
-#searchBox {
-
+.searchbar {
+    display: flex;
     max-width: 70vw;
+    align-items: center;
+}
+
+#searchBox {
     height: 52px;
 
     display: block;
@@ -39,10 +43,11 @@
     border: 2px solid #000000;
     box-sizing: border-box;
     border-radius: 3px;
-
-    color: rgb(255, 255, 255);
-    font-size: 1.5rem;
     padding-left: 1rem;
+
+    color: var(--main-text-color);
+    font-size: 1.5rem;
+    font-family: 'Roboto', sans-serif;
 }
 
 #searchBox:focus {
@@ -52,13 +57,13 @@
 
 #searchBox::placeholder {
     font-size: 1rem;
-    color: rgb(199, 199, 199)
+    color: var(--main-text-color-muted);
+    font-family: 'Roboto', sans-serif;
 }
 
 #header-text {
     display: block;
     margin: 0 auto;
-    color: white;
     text-align: center;
 }
 
@@ -74,18 +79,49 @@
     flex-wrap: wrap;
 }
 
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 100;
+    }
+}
+
 .card-img {
-    --card-width: 200px;
+    --card-border: #F9FBF2;
+    --card-width: 250px;
     --card-aspect-ratio: calc(3.4 / 2.33);
+
     width: var(--card-width);
     height: calc(var(--card-width) * var(--card-aspect-ratio));
 
-    border: 1px solid black;
+    border: 5px solid var(--card-border);
     border-radius: 5px;
-    margin: 1rem 2rem 0rem 2rem;
+    margin: 15px;
 
-    /* TODO: Set this to a generic unavailable image */
-    background-image: url("");
+    animation: fade-in 0.75s;
+
+
+    background-image: url("/assets/images/img-unavailable.png");
     background-size: contain;
     background-repeat: no-repeat;
+}
+
+.apiLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--main-text-color);
+}
+
+.apiIcon {
+    width: 100px;
+    height: 100px;
+}
+
+
+.apiLink:hover {
+    color: var(--second-text-color);
 }
