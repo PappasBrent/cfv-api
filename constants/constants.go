@@ -7,6 +7,6 @@ const (
 	SetsTableName               = "sets"
 	CardSetXrefsTableName       = "card_set_xrefs"
 	TournamentStatusesTableName = "tournament_statuses"
-	CardImagesBaseURL           = "http://localhost:8080/assets/card-images"
+	CardImagesBaseURL           = "http://localhost:3000/assets/card-images"
 	SwaggerPath                 = "/assets/config/swagger.yaml"
 )
