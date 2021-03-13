@@ -713,12 +713,14 @@ func GetCards(c *gin.Context) {
 
 	query := db.Preload("Sets").Preload("TournamentStatuses")
 
+	// Parse string params
 	for param, columnName := range stringSearchParamsToColumnNames {
 		if val := c.Query(param); val != "" {
 			query = query.Where(fmt.Sprintf("UPPER(%s) LIKE ?", columnName), strings.ToUpper(val))
 		}
 	}
 
+	// Parse int params
 	for param, columnName := range intSearchParamsToColumnNames {
 		// TODO: Add support for checking greater than, less than, etc.
 		if strVal := c.Query(param); strVal != "" {
@@ -730,6 +732,29 @@ func GetCards(c *gin.Context) {
 			}
 		}
 	}
+
+	// Parse pagination params
+	pageQuery := c.Query("page")
+	page, err := strconv.Atoi(pageQuery)
+	if err != nil || page == 0 {
+		page = 1
+	}
+
+	pageSizeQuery := c.Query("pagesize")
+	pageSize, err := strconv.Atoi(pageSizeQuery)
+	if err != nil {
+		pageSize = constants.DefaultPageSize
+	}
+
+	switch {
+	case pageSize < constants.MinPageSize:
+		pageSize = constants.MinPageSize
+	case pageSize > constants.MaxPageSize:
+		pageSize = constants.MaxPageSize
+	}
+
+	offset := (page - 1) * pageSize
+	query = query.Offset(offset).Limit(pageSize)
 
 	cards := []models.Card{}
 	query.Find(&cards)

@@ -9,4 +9,7 @@ const (
 	TournamentStatusesTableName = "tournament_statuses"
 	CardImagesBaseURL           = "http://localhost:3000/assets/card-images"
 	SwaggerPath                 = "/assets/config/swagger.yaml"
+	DefaultPageSize             = 50
+	MinPageSize                 = 10
+	MaxPageSize                 = 1000
 )
