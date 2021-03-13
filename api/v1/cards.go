@@ -727,7 +727,7 @@ func GetCards(c *gin.Context) {
 			if intVal, err := strconv.Atoi(strVal); err == nil {
 				query = query.Where(fmt.Sprintf("%s = ?", columnName), intVal)
 			} else {
-				c.JSON(http.StatusInternalServerError, invalidIntegerFieldError(param, strVal))
+				c.JSON(http.StatusBadRequest, invalidIntegerFieldError(param, strVal))
 				return
 			}
 		}
