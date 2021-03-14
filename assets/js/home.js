@@ -5,8 +5,9 @@ const CARD_IMG_CLASS = "card-img";
 
 async function queryCards(searchInput) {
     const res = await fetch(REQUEST_URL + searchInput.value);
-    const cards = await res.json();
-    cardsWithEnglishScan = cards.filter(card => card.imageurlen != false)
+    const responseJson = await res.json();
+    const cards = responseJson.data;
+    cardsWithEnglishScan = cards.filter(card => card.imageurlen != false);
     populateCardResults(cardsWithEnglishScan);
 }
 
@@ -18,7 +19,14 @@ function populateCardResults(cards) {
         const cardDiv = document.createElement("div");
         cardDiv.classList.add(CARD_IMG_CLASS);
         cardDiv.style.backgroundImage = `url(${card.imageurlen})`;
-        cardResultsDiv.appendChild(cardDiv);
+        
+        cardImgLink = document.createElement("a");
+        cardImgLink.href = card.imageurlen;
+        cardImgLink.target = "_blank";
+
+        cardImgLink.appendChild(cardDiv);
+
+        cardResultsDiv.appendChild(cardImgLink);
     }
 }
 
