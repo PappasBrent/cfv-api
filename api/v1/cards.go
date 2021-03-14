@@ -705,7 +705,6 @@ func GetCard(c *gin.Context) {
 
 // GetCards returns all the cards matching the request's requirements
 // as JSON
-// TODO: Add pagination
 func GetCards(c *gin.Context) {
 
 	db := c.MustGet(constants.DB).(*gorm.DB)

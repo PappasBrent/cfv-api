@@ -1,6 +1,4 @@
 /* TODO: Change font size based on user screen size */
-/* TODO: Use css variables for site theming (e.g. color)? */
-/* TODO: Add custom font */
 
 :root {
     --main-text-color: #D7F9FF;
