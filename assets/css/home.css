@@ -1,4 +1,3 @@
-/* TODO: Fix scrolling so that it's always smooth; currently jumps once animation finishes */
 .banner {
     background:
         linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
@@ -12,16 +11,17 @@
 }
 
 .banner-top {
+    --banner-width-px: 4600px;
     animation: scroll-to-right 120s linear infinite;
 }
 
 @keyframes scroll-to-right {
     from {
-        background-position: 0 0;
+        background-position: 0px 0;
     }
 
     to {
-        background-position: -100% 0;
+        background-position: var(--banner-width-px) 0;
     }
 }
 
