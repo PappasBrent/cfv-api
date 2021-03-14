@@ -325,6 +325,30 @@ type triggerEffectParam struct {
 	TriggerEffect string `json:"triggereffect"`
 }
 
+// swagger:parameters getCards
+type pageParam struct {
+	// The page of results to return
+	// Page numbering starts at 1. If an invalid value is passed, this
+	// will be set to 1
+
+	// minimum: 1
+	// example: 1
+	// in: query
+	Page int `json:"page"`
+}
+
+// swagger:parameters getCards
+type pageSizeParam struct {
+	// The size of the page to return.
+	// If an invalid value is passed, this will be set to 50
+
+	// minimum: 10
+	// maximum: 1000
+	// example: 50
+	// in: query
+	PageSize int `json:"pagesize"`
+}
+
 // There has to be a way to replace just the Sets member of the Card
 // model to be an array string, but this works for now
 type cardResponseBody struct {
@@ -616,6 +640,17 @@ type cardResponseBody struct {
 	TriggerEffect string `json:"triggereffect"`
 }
 
+// Store pagination information
+type pagination struct {
+	// The page number
+	// example: 1
+	Page int `json:"page"`
+
+	// The number of results per page
+	// example: 50
+	PageSize int `json:"pagesize"`
+}
+
 // swagger:route GET /card cards getCard
 //
 // Returns a single card with the specified ID
@@ -641,9 +676,12 @@ type cardResponse struct {
 // A list of cards
 // swagger:response cardsResponse
 type cardsResponse struct {
-	// An array of cards
+	// An array of cards and paging info
 	// in: Body
-	Body []cardResponseBody
+	Body struct {
+		Data   []cardResponseBody `json:"data"`
+		Paging pagination         `json:"paging"`
+	}
 }
 
 // GetCard returns a single card as JSON
@@ -752,13 +790,21 @@ func GetCards(c *gin.Context) {
 	case pageSize > constants.MaxPageSize:
 		pageSize = constants.MaxPageSize
 	}
+	paging := pagination{page, pageSize}
 
 	offset := (page - 1) * pageSize
 	query = query.Offset(offset).Limit(pageSize)
 
 	cards := []models.Card{}
 	query.Find(&cards)
-	c.JSON(200, cards)
+	response := struct {
+		Data   []models.Card `json:"data"`
+		Paging pagination    `json:"paging"`
+	}{
+		cards,
+		paging,
+	}
+	c.JSON(200, response)
 }
 
 // GetCardsInSet returns all the cards in the given set as JSON
