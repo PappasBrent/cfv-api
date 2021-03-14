@@ -3,10 +3,11 @@ const BASE_PATH = window.location.host;
 const REQUEST_URL = new URL('/api/v1/cards?name=', PROTOCOL + BASE_PATH);
 const CARD_IMG_CLASS = "card-img";
 
-async function queryCards(searchBox) {
-    const res = await fetch(REQUEST_URL + searchBox.value);
+async function queryCards(searchInput) {
+    const res = await fetch(REQUEST_URL + searchInput.value);
     const cards = await res.json();
-    populateCardResults(cards);
+    cardsWithEnglishScan = cards.filter(card => card.imageurlen != false)
+    populateCardResults(cardsWithEnglishScan);
 }
 
 
@@ -23,8 +24,8 @@ function populateCardResults(cards) {
 
 
 function main() {
-    const searchBox = document.getElementById("searchBox");
-    searchBox.onchange = () => queryCards(searchBox);
+    const searchInput = document.getElementById("searchInput");
+    searchInput.onchange = () => queryCards(searchInput);
 }
 
 main();

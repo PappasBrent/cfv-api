@@ -30,12 +30,16 @@
     </div>
 
     <div class="content">
-        <div class="searchbar">
-            <input type="text" placeholder="Enter card name" name="searchBox" id="searchBox">
-            <a class="apiLink" href="/api/v1/docs">
-                <img class="apiIcon" src="/assets/images/api-icon.png" alt="">
-                Docs
-            </a>
+
+        <div class="searchInfo">
+            <div class="searchbar">
+                <input type="text" placeholder="Enter card name" name="searchInput" id="searchInput">
+                <a class="apiLink" href="/api/v1/docs">
+                    <img class="apiIcon" src="/assets/images/api-icon.png" alt="">
+                    Docs
+                </a>
+            </div>
+            <small id="searchNote">* Only cards with an English scan will be displayed</small>
         </div>
 
         <div class="card-results" data-name="card-results">
