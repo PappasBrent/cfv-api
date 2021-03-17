@@ -3,7 +3,6 @@ package models
 import (
 	"cfv-api/constants"
 	"encoding/json"
-	"fmt"
 )
 
 type Card struct {
@@ -61,13 +60,6 @@ func (c *Card) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{
 		Alias: (*Alias)(c),
-	}
-	// There has to be a better way to do this...
-	if c.ImageURLEn != "" {
-		result.ImageURLEn = fmt.Sprintf("%s/%s", constants.CardImagesBaseURL, c.ImageURLEn)
-	}
-	if c.ImageURLJp != "" {
-		result.ImageURLJp = fmt.Sprintf("%s/%s", constants.CardImagesBaseURL, c.ImageURLJp)
 	}
 	return json.Marshal(result)
 }
