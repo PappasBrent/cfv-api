@@ -463,7 +463,7 @@ type cardResponseBody struct {
 	Illust5 string `json:"illust5"`
 
 	// A URL to a English scan of the card
-	// example: http://cf-vanguard.cards/assets/card-images/43-en.png
+	// example: https://cfv-card-images.s3.us-east-2.amazonaws.com/43-en.png
 	// Extensions:
 	// ---
 	// x-nullable: true
@@ -472,7 +472,7 @@ type cardResponseBody struct {
 	// TODO: Update this comment to match the live server
 
 	// A URL to a Japanese scan of the card
-	// example: http://cf-vanguard.cards/assets/card-images/43-jp.png
+	// example: https://cfv-card-images.s3.us-east-2.amazonaws.com/43-jp.png
 	// Extensions:
 	// ---
 	// x-nullable: true
