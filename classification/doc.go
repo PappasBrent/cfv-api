@@ -15,8 +15,8 @@
 // #section/Terms-of-Service
 //
 //
-//     Schemes: http
-//     Host: cf-vanguard.cards
+//     Schemes: https
+//     Host: card-fight-vanguard-api.ue.r.appspot.com
 //     BasePath: /api/v1
 //     Version: 1.0.0.
 //     License: CC BY-SA 3.0 https://creativecommons.org/licenses/by-sa/3.0/
